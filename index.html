@@ -1,0 +1,14 @@
+<form id="resultForm">
+  <label for="roll">Enter Roll Number:</label>
+  <input type="text" id="roll" name="roll" required>
+  <button type="submit">Check Result</button>
+</form>
+
+<script>
+  document.getElementById('resultForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var roll = document.getElementById('roll').value;
+    var url = 'https://upresults.nic.in/result.aspx?roll=' + encodeURIComponent(roll);
+    window.open(url, '_blank');
+  });
+</script>
