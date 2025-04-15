@@ -1,14 +1,142 @@
-<form id="resultForm">
-  <label for="roll">Enter Roll Number:</label>
-  <input type="text" id="roll" name="roll" required>
-  <button type="submit">Check Result</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Percentage Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4faff;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #ccc;
+    }
+    .subject-input {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007BFF;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e9f5e9;
+      border-left: 5px solid #28a745;
+      font-size: 18px;
+    }
+    .failed {
+      color: red;
+      font-weight: bold;
+    }
+    .passed {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Percentage Calculator</h1>
+
+<form id="percentageForm">
+  <div class="subject-input">
+    <label for="math">Math (out of 100):</label>
+    <input type="number" id="math" max="100" placeholder="Enter Math Marks">
+  </div>
+  <div class="subject-input">
+    <label for="hindi">Hindi (out of 100):</label>
+    <input type="number" id="hindi" max="100" placeholder="Enter Hindi Marks">
+  </div>
+  <div class="subject-input">
+    <label for="social">Social Science (out of 100):</label>
+    <input type="number" id="social" max="100" placeholder="Enter Social Science Marks">
+  </div>
+  <div class="subject-input">
+    <label for="english">English (out of 100):</label>
+    <input type="number" id="english" max="100" placeholder="Enter English Marks">
+  </div>
+  <div class="subject-input">
+    <label for="art">Art (out of 100):</label>
+    <input type="number" id="art" max="100" placeholder="Enter Art Marks">
+  </div>
+  <div class="subject-input">
+    <label for="science">Science (out of 100):</label>
+    <input type="number" id="science" max="100" placeholder="Enter Science Marks">
+  </div>
+
+  <button type="button" onclick="calculatePercentage()">Calculate Result</button>
 </form>
 
+<div id="result"></div>
+
 <script>
-  document.getElementById('resultForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var roll = document.getElementById('roll').value;
-    var url = 'https://upresults.nic.in/result.aspx?roll=' + encodeURIComponent(roll);
-    window.open(url, '_blank');
-  });
+  function calculatePercentage() {
+    const subjects = ['math', 'hindi', 'social', 'english', 'art', 'science'];
+    const passingMarks = 33;
+    const maxMarksEach = 100;
+    let total = 0;
+    let resultHTML = '';
+    let allPassed = true;
+
+    subjects.forEach(subject => {
+      const marks = parseFloat(document.getElementById(subject).value);
+      const subjectName = subject.charAt(0).toUpperCase() + subject.slice(1);
+
+      if (!isNaN(marks)) {
+        total += marks;
+        if (marks >= passingMarks) {
+          resultHTML += `<p>${subjectName}: ${marks} - <span class="passed">Passed</span></p>`;
+        } else {
+          resultHTML += `<p>${subjectName}: ${marks} - <span class="failed">Failed</span></p>`;
+          allPassed = false;
+        }
+      } else {
+        resultHTML += `<p>${subjectName}: <span class="failed">No Marks Entered</span></p>`;
+        allPassed = false;
+      }
+    });
+
+    const totalOutOf = subjects.length * maxMarksEach;
+    const percentage = (total / totalOutOf) * 100;
+
+    resultHTML += `<hr><p><strong>Total Marks:</strong> ${total} / ${totalOutOf}</p>`;
+    resultHTML += `<p><strong>Percentage:</strong> ${percentage.toFixed(2)}%</p>`;
+    resultHTML += `<p><strong>Overall Result:</strong> <span class="${allPassed ? 'passed' : 'failed'}">${allPassed ? 'Passed' : 'Failed'}</span></p>`;
+
+    document.getElementById('result').innerHTML = resultHTML;
+  }
 </script>
+
+</body>
+</html>
